@@ -8,7 +8,7 @@ import random
 i = 1
 while(1):
     filename = "JT" + str(i) + ".jpg"
-    hwnd = 197746  # 窗口的编号，0号表示当前活跃窗口
+    hwnd = 524488  # 窗口的编号，0号表示当前活跃窗口
     # 根据窗口句柄获取窗口的设备上下文DC（Divice Context）
     hwndDC = win32gui.GetWindowDC(hwnd)
     # 根据窗口的DC获取mfcDC

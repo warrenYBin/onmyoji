@@ -12,7 +12,8 @@ def clickLeftCur():
 
 
 def click_it(pos):
-    handle = 133226
+    handle = hd
+    print(handle)
     client_pos = win32gui.ScreenToClient(handle, pos)
     tmp = win32api.MAKELONG(client_pos[0], client_pos[1])
     win32gui.SendMessage(handle, win32con.WM_ACTIVATE, win32con.WA_ACTIVE, 0)
@@ -29,7 +30,8 @@ def getCurPos():  # 获得鼠标位置信息，这个再实际代码没用上，
 
 
 def window_capture(filename):
-    hwnd = 133226  # 窗口的编号，0号表示当前活跃窗口
+    hwnd = hd  # 窗口的编号，0号表示当前活跃窗口
+    print(hwnd)
     # 根据窗口句柄获取窗口的设备上下文DC（Divice Context）
     hwndDC = win32gui.GetWindowDC(hwnd)
     # 根据窗口的DC获取mfcDC
@@ -70,7 +72,9 @@ def main():
         end2 = cv2.imread('end777.png')  # 开完宝箱后，点击任意结束本轮
         end2_2 = cv2.imread('end2-2.png')
         end3_3 = cv2.imread('end3-3.png')
+        end_agin = cv2.imread('endagin.png')
         end_danren = cv2.imread('end_danren.png')
+        end_shibai = cv2.imread('endshibai.png')
         # 用了一个最简答的图像相见的方式来完成以下动作，具体图示往下翻
         begin_meanValue = np.mean(srcImg[450:494, 799:904, :] - begin)  # 检测截图是否包含开始战斗
         end1_meanValue = np.mean(srcImg[119:184, 380:480, :] - end1)  # 检测战斗是否结束
@@ -78,11 +82,20 @@ def main():
         end2_2_meanValue = np.mean(srcImg[543:586, 862:1006, :] - end2_2)
         end3_3_meanValue = np.mean(srcImg[385:416, 747:783, :] - end3_3)
         end_danren_meanValue = np.mean(srcImg[161:220, 390:459, :] - end_danren)
+        end_agin_meanValue = np.mean(srcImg[398:426, 615:742, :] - end_agin)
+        end_shibai_meanValue = np.mean(srcImg[109:161, 389:454, :] - end_shibai)
         # print(begin)
         if end3_3_meanValue < 50:
             k = 0
             move_x = random.randint(1135, 1163)
             move_y = random.randint(575, 604)
+            #moveCurPos(move_x, move_y)
+            #clickLeftCur()
+            click_it((move_x, move_y))
+
+        if end_shibai_meanValue < 50:
+            move_x = random.randint(490, 551)
+            move_y = random.randint(491, 658)
             #moveCurPos(move_x, move_y)
             #clickLeftCur()
             click_it((move_x, move_y))
@@ -94,7 +107,10 @@ def main():
             #moveCurPos(move_x, move_y)
             #clickLeftCur()
             click_it((move_x, move_y))
-
+        if end_agin_meanValue < 50:
+            move_x = random.randint(620, 730)
+            move_y = random.randint(400, 420)
+            click_it((move_x, move_y))
         if begin_meanValue < 50:  # 界面运行到由战斗开始就点击战斗开始
             k = 0
             move_x = random.randint(1185, 1289)  # 设计随机点击坐标点，防止被检测，虽然不知道有没效果，初衷设置如此
@@ -155,6 +171,22 @@ def main():
             # clickLeftCur()
             #click_it((move_x, move_y))
 
+
+hwnd_title = dict()
+hd=1
+
+def get_all_hwnd(hwnd, mouse):
+    if win32gui.IsWindow(hwnd) and win32gui.IsWindowEnabled(hwnd) and win32gui.IsWindowVisible(hwnd):
+        hwnd_title.update({hwnd: win32gui.GetWindowText(hwnd)})
+
+
+win32gui.EnumWindows(get_all_hwnd, 0)
+
+for h, t in hwnd_title.items():
+    if t is not "":
+        if t == '阴阳师-网易游戏':
+            hd = h
+            print(hd, t)
 
 
 if __name__=="__main__":
